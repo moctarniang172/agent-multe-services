@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userChema = new mongoose.Schema({
-     name: {
+     nom: {
     type: String,
     required: true
   },
@@ -25,7 +25,34 @@ const userChema = new mongoose.Schema({
     type: String,
     enum: ["admin", "agent"],
     default: "agent"
-  }
+  },
+    isActive: {
+    type: Boolean,
+    default: false
+    },
+    activationToken: String,
+    
+    resetToken: {
+        type: String,
+        default: null
+    },
+    resetTokenExpiry: {
+        type: Date,
+        default: null
+    },
+    resetCode: {
+        type: String,
+        default: null
+    },
+    resetCodeExpire: {
+        type: Date,
+        default: null
+    },
+    resetAttempts: {
+        type: Number,
+        default: 0
+    }
 
 }, { timestamps: true })
-module.exports = mongoose.Model('user', userChema);
+
+module.exports = mongoose.model('user', userChema);
