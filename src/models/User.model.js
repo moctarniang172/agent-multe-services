@@ -31,7 +31,10 @@ const userChema = new mongoose.Schema({
     default: false
     },
     activationToken: String,
-    
+    activationTokenExpire:{
+      type: String,
+        default: null
+    },
     resetToken: {
         type: String,
         default: null
