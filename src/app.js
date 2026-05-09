@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
+app.use('/api', require("./routes/"));
 
 app.get('/',(req,res)=>{
     res.json({message: "Bienvenue a RED PRODUCT !"})
