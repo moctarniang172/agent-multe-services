@@ -1,6 +1,7 @@
 const User = require("../models/User.model");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken")
 
 const generateTokenValidation = () => {
    return crypto.randomBytes(32).toString("hex");
@@ -56,4 +57,41 @@ exports.activerCompte = async (token) => {  // ✅ nom harmonisé
    await result.save();
 
    return result;
+};
+
+// LOGIN
+exports.login = async (data) => {
+    const { email, password } = data;
+
+    if (!email || !password) {
+        throw new Error("remplir tous les champs !!");
+    }
+
+    const userconnecter = await user.findOne({ email });
+
+    if (!userconnecter) {
+        throw new Error("email n'existe pas");
+    }
+      if (!userconnecter.isActive) {
+    throw new Error("Veuillez activer votre compte");
+}
+
+    const verifierPassword = await bycrypt.compare(
+        password,
+        userconnecter.password
+    );
+
+    if (!verifierPassword) {
+        throw new Error("mot de passe incorrect");
+    }
+  
+
+    const token = jwt.sign(
+        { id: userconnecter._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '7d' }
+    );
+
+    return { token: token, id: userconnecter._id, nom: userconnecter.nom, // On sort le nom de l'objet user 
+             email: userconnecter.email};
 };

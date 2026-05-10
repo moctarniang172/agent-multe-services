@@ -1,6 +1,6 @@
-const authService = require("../services/auth.service");  // ✅ camelCase
+const authService = require("../services/auth.service"); 
 const transport = require("../config/nodemailer");
-// ✅ crypto supprimé (inutilisé ici)
+
 
 exports.register = async (req, res) => {
    try {
@@ -8,7 +8,6 @@ exports.register = async (req, res) => {
 
       const url = `http://localhost:3000/api/auth/activate/${token}`;
 
-      // ✅ sendMail dans son propre try/catch
       try {
          await transport.sendMail({
             to: user.email,
@@ -80,12 +79,29 @@ exports.register = async (req, res) => {
    }
 };
 
-exports.activerCompte = async (req, res) => {  // ✅ nom harmonisé
+exports.activerCompte = async (req, res) => {  
    try {
-      await authService.activerCompte(req.params.token);  // ✅ nom corrigé
+      await authService.activerCompte(req.params.token);  
       res.redirect("http://localhost:3000/api/?activated=true");
 
    } catch (error) {
       res.status(400).json({ message: error.message });
    }
+};
+
+
+// CONNEXION
+exports.login = async (req, res) => {
+    
+    try {
+        const userlogin = await authService.login(req.body);
+
+        res.status(200).json({
+            message: "connexion avec succes",
+            ...userlogin
+        });
+
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 };
