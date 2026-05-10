@@ -8,9 +8,9 @@ router.post('/inscription', authcontroller.register);
 router.get("/activate/:token", authcontroller.activerCompte);
 router.post('/connexion', authcontroller.login);
 
-router.post('/oublier', resetcontroller.resetPassword);
+router.post('/oublier', resetcontroller.renitialiser);
 router.post('/code', resetcontroller.verifyCode);
-router.post('/reset', resetcontroller.renitialiser);
+router.post('/reset', resetcontroller.resetPassword);
 
 
 

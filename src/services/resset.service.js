@@ -17,7 +17,7 @@ exports.ressetPassword = async (data) => {
 
    
    const code = Math.floor(100000 + Math.random() * 900000).toString();
-   const hashedCode = crypto.createHash("sha256").update(code).digest("hex");
+   const hashedCode = crypto.createHash("sha256").update(code.toString()).digest("hex");
 
    user.resetCode = hashedCode;
    user.resetCodeExpire = new Date(Date.now() + 15 * 60 * 1000); 
@@ -51,7 +51,7 @@ exports.ressetPassword = async (data) => {
                <hr style="margin:20px 0;" />
 
                <p style="font-size:12px; color:#aaa; text-align:center;">
-                  © ${new Date().getFullYear()} RED-PRODUCT. Tous droits réservés.
+                  © ${new Date().getFullYear()} Agence-Multis-Services. Tous droits réservés.
                </p>
             </div>
          </div>
@@ -64,6 +64,8 @@ exports.ressetPassword = async (data) => {
 // ====== etape 2 ==============
 
 exports.verifyCode = async (email, code) => {
+
+   
    const user = await User.findOne({ email });
 
    if (!user) throw new Error("Utilisateur introuvable");
@@ -71,16 +73,14 @@ exports.verifyCode = async (email, code) => {
    if (user.resetAttempts >= 5) {
       throw new Error("Trop de tentatives, recommencez");
    }
-
    const hashedCode = crypto.createHash("sha256").update(code).digest("hex");
 
-   if (user.resetCodeExpire < Date.now()) {
+if (!user.resetCodeExpire || user.resetCodeExpire < Date.now()) {
    throw new Error("Code expiré");
 }
 
 if (user.resetCode !== hashedCode) {
    user.resetAttempts += 1;
-   user.resetAttempts = 0;
 
    await user.save();
    throw new Error("Code invalide");

@@ -17,6 +17,7 @@ exports.renitialiser = async (req, res) => {
 
 // ====== etape 2 — Vérifier le code ==============
 exports.verifyCode = async (req, res) => {
+  console.log(req.body);
   try {
     const { email, code } = req.body;
 
