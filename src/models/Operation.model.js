@@ -26,11 +26,6 @@ const operationSchema = new mongoose.Schema({
     default: 0
   },
 
-  profit: {
-    type: Number,
-    default: 0
-  }
-
 }, { timestamps: true });
 
 module.exports = mongoose.model("Operation", operationSchema);
